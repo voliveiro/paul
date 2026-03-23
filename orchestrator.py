@@ -1,3 +1,5 @@
+import os
+import json
 import anthropic
 from agents import AGENTS
 from datetime import datetime
@@ -13,11 +15,50 @@ ORCHESTRATOR_PROMPT = """You are a senior policy analyst facilitating an inter-a
 
 Be analytically sharp. Name things precisely. Avoid diplomatic smoothing. Write like a senior civil servant, not an academic. Short sentences. Plain words. No jargon. If you can cut a word, cut it. Flag problems directly — do not soften them."""
 
+with open(os.path.join(os.path.dirname(__file__), "agents", "summaries.json")) as _f:
+    AGENT_SUMMARIES = json.load(_f)
+
+
+def select_agents(proposal):
+    """Ask Claude to pick 3–5 most relevant agents for this proposal."""
+    agent_profiles = []
+    for a in AGENTS:
+        summary = AGENT_SUMMARIES.get(a.id, a.role)
+        agent_profiles.append(f"[{a.id}] {a.name}: {summary}")
+
+    profiles_text = "\n\n".join(agent_profiles)
+
+    prompt = f"""You are selecting which government agencies should deliberate on a policy proposal.
+
+PROPOSAL:
+"{proposal}"
+
+AVAILABLE AGENCIES:
+{profiles_text}
+
+Select between 3 and 5 agencies whose mandates make them most directly and substantively relevant to this proposal. Prioritise agencies with genuine jurisdictional stakes, not peripheral interest.
+
+Return ONLY a JSON array of agency IDs (lowercase strings), e.g. ["mti", "mha", "msf"]. No explanation, no other text."""
+
+    response = client.messages.create(
+        model="claude-sonnet-4-5",
+        max_tokens=80,
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    text = response.content[0].text.strip()
+    selected = json.loads(text)
+    known = {a.id for a in AGENTS}
+    selected = [aid for aid in selected if aid in known]
+    # Clamp to 3–5
+    return selected[:5] if len(selected) >= 3 else selected
+
+
 def load_proposal(path="proposal.txt"):
     with open(path, "r") as f:
         return f.read().strip()
 
-def call_agent(system_prompt, user_message, max_tokens=1000):
+def call_agent(system_prompt, user_message, max_tokens=2000):
     response = client.messages.create(
         model="claude-sonnet-4-5",
         max_tokens=max_tokens,
@@ -55,9 +96,13 @@ def save_output(proposal, responses, synthesis):
         f.write(synthesis + "\n")
     print(f"\nOutput saved to {path}")
 
-def run_simulation(proposal, agents=None):
-    if agents is None:
-        agents = AGENTS
+
+def run_simulation_stream(proposal, selected_ids=None):
+    """Generator that yields SSE-formatted events as each agent responds."""
+    agents = AGENTS
+    if selected_ids is not None:
+        id_set = set(selected_ids)
+        agents = [a for a in AGENTS if a.id in id_set]
 
     responses = []
 
@@ -65,15 +110,12 @@ def run_simulation(proposal, agents=None):
         context = build_context(proposal, responses)
         text = call_agent(agent.system_prompt, context)
 
-        print(f"\n=== {agent.name} ===")
-        print(text)
-        
-        responses.append({
-            "id": agent.id,
-            "name": agent.name,
-            "role": agent.role,
-            "text": text
-        })
+        print(f"\n=== {agent.name} ===\n{text}")
+
+        r = {"id": agent.id, "name": agent.name, "role": agent.role, "text": text}
+        responses.append(r)
+
+        yield f"data: {json.dumps({'type': 'agent', **r})}\n\n"
 
     # Synthesis pass
     synthesis_input = f"Policy proposal:\n\"{proposal}\"\n\nAgency responses:\n\n"
@@ -83,17 +125,15 @@ def run_simulation(proposal, agents=None):
 
     synthesis = call_agent(ORCHESTRATOR_PROMPT, synthesis_input, max_tokens=8000)
 
-    print("\n=== SYNTHESIS ===")
-    print(synthesis)
+    print(f"\n=== SYNTHESIS ===\n{synthesis}")
 
     save_output(proposal, responses, synthesis)
 
-    return {
-        "proposal": proposal,
-        "responses": responses,
-        "synthesis": synthesis
-    }
+    yield f"data: {json.dumps({'type': 'synthesis', 'text': synthesis})}\n\n"
+    yield f"data: {json.dumps({'type': 'done'})}\n\n"
+
 
 if __name__ == "__main__":
     proposal = load_proposal()
-    run_simulation(proposal)
+    for event in run_simulation_stream(proposal):
+        print(event, end="")

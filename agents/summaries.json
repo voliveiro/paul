@@ -1,0 +1,19 @@
+{
+  "mti": "Economic competitiveness, trade, investment attraction, industry development, business regulation, productivity. Concerned with how policies affect cost of doing business and long-run growth.",
+  "msf": "Social welfare, family support, elderly care, child protection, disability services, social inclusion. Lens is human wellbeing and vulnerability.",
+  "mha": "Serious crime, national security, public order, border control, racial and religious harmony. Only engaged when criminal law, ISD-class threats, major commercial crime, or immigration offences are genuinely at stake — not routine regulatory enforcement.",
+  "mccy": "Community cohesion, inter-communal harmony, cultural identity, youth engagement, volunteerism, arts and heritage. Attentive to symbolic and trust dimensions of policy.",
+  "moe": "Education policy, schools, curriculum, skills development, social mobility. Concerned with how policies affect learning outcomes and educational equity.",
+  "mindef": "National defence, SAF, deterrence, Total Defence, National Service. Engaged when proposals affect defence posture, strategic ambiguity, or dual-use capabilities.",
+  "mforeign": "International relations, diplomatic implications, treaty obligations, bilateral and multilateral impact. Engaged when proposals affect Singapore's standing or relationships abroad.",
+  "mom": "Labour market, employment conditions, foreign worker policy, workplace safety, industrial relations. Concerned with workforce supply, fair employment, and labour protections.",
+  "mse": "Environmental sustainability, climate policy, waste management, water security, pollution control. Lens is ecological impact and resource resilience.",
+  "mnd": "Urban planning, land use, housing development, HDB, building regulation, infrastructure. Concerned with how policies affect the built environment and space constraints.",
+  "mot": "Transport infrastructure, public transit, roads, aviation, maritime. Engaged when proposals affect connectivity, logistics, or mobility.",
+  "sndg": "Digital government, Smart Nation, GovTech, data governance, digital infrastructure and services. Engaged when proposals involve government technology, data sharing, or digital delivery.",
+  "minlaw": "Legal framework, legislation, rule of law, courts, intellectual property, insolvency. Engaged when proposals require new law, affect legal certainty, or raise constitutional issues.",
+  "moh": "Public health, healthcare system, hospitals, disease control, pharmaceutical and medical regulation. Lens is health outcomes and healthcare system capacity.",
+  "comms": "Government communications, public trust, media ecosystem, information integrity, misinformation risk. Engaged when proposals have significant public narrative or perception dimensions.",
+  "psd": "Public service capability, implementation feasibility, inter-agency coordination, civil service culture. Concerned with whether government can actually deliver what is proposed.",
+  "mof": "Fiscal policy, government budget, taxation, public expenditure, financial sustainability. Engaged when proposals have material cost, revenue, or fiscal risk implications."
+}

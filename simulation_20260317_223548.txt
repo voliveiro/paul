@@ -1,0 +1,447 @@
+POLICY SIMULATION OUTPUT
+============================================================
+
+PROPOSAL:
+Singapore is considering a mandatory digital registration platform for all migrant domestic workers (MDWs). Under this proposal, employers would be required as a condition of the work permit to enrol their MDW on a government-managed platform. The platform would log daily check-ins initiated by the worker, record working hours, and track employer contact frequency. Anomalies — such as no check-in for 48 hours, unusually long working days, or sudden drops in contact frequency — would trigger automated alerts to a central dashboard monitored by MOM and MSF. Escalation pathways would route welfare concerns to social service officers and potential criminal matters to the relevant enforcement agencies.
+
+The stated objectives are early detection of abuse and exploitation, upstream welfare intervention, and more systematic enforcement of the Employment of Foreign Manpower Act. Participation would be mandatory for all employers holding an MDW work permit, with non-compliance treated as a permit condition violation.
+
+Agencies are invited to assess this proposal from their respective mandates, identify concerns or modifications required before endorsement, and flag any unanswered questions that must be resolved before implementation.
+
+============================================================
+
+=== MTI (Ministry of Trade and Industry) ===
+
+# MTI Assessment: Digital Registration Platform for MDWs
+
+## Core Economic Concern
+
+This proposal imposes significant compliance burden on approximately 240,000 households — a quarter-million economic units suddenly required to manage daily digital reporting. Many employers are elderly or digitally non-fluent. The check-in requirement creates daily friction in household operations. If enforcement is strict, we risk permit violations cascading through middle-income households that depend on MDW support to maintain dual-income arrangements. That threatens workforce participation, particularly among women in mid-career professional roles. If a working mother loses her work permit because her helper missed check-ins during hospitalization, or because the employer didn't understand the app, we've just reduced our effective labor force.
+
+## Investment and Talent Climate
+
+Singapore's value proposition to global talent includes functional household support infrastructure. Senior executives, researchers, and professionals relocate here partly because domestic help is accessible and well-regulated. This proposal adds reputational and operational risk. Every employer is now one technical glitch or misunderstood alert away from MOM scrutiny. That's not catastrophic, but it shifts Singapore from "seamless" to "manageable but monitored." More concerning: if regional competitors keep simpler regimes, we hand them a minor but real advantage in talent attraction. The compliance gap between hiring an MDW here versus Hong Kong or Tokyo just widened.
+
+## Conditions for MTI Support
+
+We could support a modified version. Make the platform **opt-in with incentives** rather than mandatory. Offer reduced levy or faster permit processing for participating employers. This targets uptake among higher-risk employers without blanket compliance burden. Alternatively, implement **risk-based triggers**: mandate registration only after first permit renewal, or only for employers with prior MOM warnings. Grandfather existing arrangements for two years while building voluntary adoption. Test the system at scale before enforcement.
+
+**Critical unanswered question:** What's the false positive rate? If 5% of alerts are spurious — travel, phone issues, elderly employers unfamiliar with apps — MOM will burn resources investigating compliant households while eroding trust. We need pilot data on alert accuracy and operational load before mandating economy-wide compliance. Without that, this is speculation dressed as policy.
+
+------------------------------------------------------------
+
+=== MSF (Ministry of Social and Family Development) ===
+
+# MSF Assessment: Digital Registration Platform for MDWs
+
+## Fundamental Concern: This Proposes Surveillance, Not Protection
+
+The proposal assumes we can engineer safety through monitoring. We cannot. Abuse happens in private spaces behind closed doors. A check-in system will not detect coercion, psychological control, passport confiscation, or an employer standing over a worker forcing compliance. It will detect **phone access**, not wellbeing. We are building a compliance theatre that mistakes data for welfare.
+
+Worse: mandatory daily reporting shifts risk onto the worker. If she does not check in — because her employer restricts phone access, because she is ill, because she does not understand the system, because the app fails — **she becomes the trigger for her own investigation**. That is not protection. That is making the vulnerable responsible for documenting their own vulnerability. The power imbalance does not disappear because we add an app.
+
+## Who This System Will Harm
+
+**Older employers.** Many are digitally excluded, frail, or cognitively declining. They depend on MDWs for basic care. Now we tell them: manage a daily app or lose your permit. When they fail — and they will — do we revoke permits and destabilize care arrangements? Or do we selectively enforce, creating arbitrary outcomes?
+
+**MDWs in controlling households.** The employers most likely to restrict freedoms are least likely to allow unsupervised phone access. A worker in a coercive situation will either be forced to check in under supervision — rendering the data meaningless — or prevented from checking in entirely, generating alerts her employer will then explain away. We have handed abusive employers a new compliance task to control.
+
+**Workers who do not want intervention.** Not every long working day signals abuse. Some arrangements are consensual, some workers prioritize income over rest days, some prefer intensive short-term contracts. A rigid monitoring system cannot distinguish. We risk intervening where workers do not want it, generating resentment and driving problems further underground.
+
+## What the System Will Miss
+
+Abuse is relational, not statistical. It involves humiliation, isolation, degradation, unpaid wages, threats. None of that shows up in check-in frequency. An employer can be in daily contact and still be withholding food. An MDW can check in every morning and still be locked in at night. The data fields captured here are **orthogonal to the harms we claim to address**.
+
+The proposal also assumes linear escalation: first signs of trouble appear in data, then we intervene early. But crises are often sudden. A worker flees after years of tolerable conditions because something breaks. Or the opposite: situations that look alarming — long hours, low contact — are stable for months. Anomaly detection will flood us with noise while missing the signal.
+
+## Operational Reality Check
+
+MSF's frontline — Family Service Centres, SSOs, crisis responders — are already stretched. We do not have capacity to investigate thousands of automated alerts generated by app failures, travel, hospitalization, phone loss. If MOM's dashboard lights up with 500 flags a day, who triages? What's the response protocol? Do we deploy a social worker to every missed check-in? This will bury us in false positives while real cases slip through because officers are drowning in low-risk escalations.
+
+And what happens after an alert? If we knock on a door and the employer says "she's fine, phone broke, here she is" — then what? Do we interview the worker in front of the employer? Do we have legal grounds to insist on private access? The proposal creates a detection layer without an effective intervention layer. We are building the front end of a system whose back end does not exist.
+
+## Where the Real Gaps Are
+
+Our current gaps are not **detection**. They are:
+
+- **Access.** Workers do not know their rights, do not know how to seek help, fear repatriation.
+- **Trust.** Workers do not believe they will be protected if they report. They are often correct.
+- **Enforcement.** MOM prosecutes a handful of employers annually. The perceived risk of consequence is negligible.
+- **Structural dependency.** Workers are tied to a single employer with no mobility. Exit is deportation.
+
+None of this is fixed by a check-in app. If we want upstream intervention, we should be investing in **mandatory pre-deployment rights briefings in-person and in-language**, **confidential helplines with guaranteed anonymity**, **protection from retaliation for complainants**, and **pathways to transfer employers without losing status**
+
+------------------------------------------------------------
+
+=== MHA (Ministry of Home Affairs) ===
+
+# MHA Assessment: Digital Registration Platform for MDWs
+
+## Primary Security Concern: We Are Building Exploitable Infrastructure
+
+This proposal creates a centralized database tracking the location, routine, and contact patterns of 240,000 foreign nationals in private residences. That is a **counterintelligence liability**. 
+
+If this system is breached — by a hostile state service, by organized crime, by a technically competent bad actor — the compromise is not abstract. An adversary gains a real-time map of which households employ foreign domestic workers, their daily patterns, and which employers are elderly, single, or potentially vulnerable. That is targeting data for home invasion, for social engineering, for recruitment or coercion of workers with access to secure residences.
+
+We are told the platform will be "government-managed." By whom? Which vendor builds it? Where is data stored? Who has access? If we contract this to a third-party developer with offshore infrastructure or maintenance support, we have just outsourced a sensitive dataset to an uncontrolled environment. If a PRC-linked firm is anywhere in the supply chain — as subcontractor, as cloud host, as technical support — we hand Beijing a registry of foreign workers in Singaporean homes, including homes of officials, SAF personnel, and business leaders.
+
+**This is not hypothetical.** We have seen systematic targeting of foreign worker populations by state actors seeking leverage, blackmail, or access. An MDW working in the home of a senior civil servant is a potential vector. A database that tracks her movements and flags anomalies in her routine is an intelligence windfall if compromised.
+
+## Operational Risk: Alert Fatigue and Resource Diversion
+
+MTI and MSF both raise false positive concerns. From a security lens, the problem is worse: **every spurious alert is a resource drain on enforcement**. If MOM generates 300 alerts daily and 90% are phone malfunctions, travel, or elderly employers missing check-ins, we are not just wasting social workers. We are diverting MOM enforcement, ICA follow-up, and potentially police time to low-value checks while real cases are deprioritized.
+
+This creates a **strategic vulnerability**. Adversaries understand triage under load. If the system is flooded with noise, response degrades. An organized syndicate running a trafficking network can exploit the chaos. They check in dutifully on behalf of controlled workers, knowing that investigators are buried in false positives and cannot scrutinize every compliant profile. We have built a system that rewards performative compliance while actual exploitation hides in the data.
+
+Worse: **alert response protocols are undefined**. MSF correctly asks: who shows up at the door? With what authority? If alerts route to undertrained SSOs without enforcement powers, we've created a gap where serious cases are identified but not acted on. If alerts route to police for every missed check-in, we are treating welfare concerns as criminal matters preemptively, souring community relations and discouraging voluntary reporting.
+
+## Threat Vector: Coercion and Manipulation of the System
+
+The proposal assumes workers have independent access to phones and can check in freely. MSF already addressed the absurdity: **abusive employers will control the check-ins**. But there's a security dimension. 
+
+An employer engaged in illegal activity — using an MDW as a mule, involving her in vice networks, exploiting her for unlicensed caregiving in multiple households — now has an incentive to ensure compliant check-ins. The system does not detect abuse; it creates a **compliance script for sophisticated bad actors**. The workers most at risk are precisely those whose employers will game the system most effectively.
+
+There's also a second-order risk: **extortion and fraud**. If non-compliance triggers permit revocation, employers become vulnerable to threats. A disgruntled worker or a third party with access to the employer's account can sabotage check-ins, generating alerts and MOM scrutiny. We have created a new vector for harassment, blackmail, or workplace disputes to escalate into permit violations. That is not a hypothetical edge case — household employment disputes already generate frequent police reports. We are handing disputing parties a new digital lever.
+
+## Social Stability Risk: Escalation of Household Enforcement
+
+This proposal turns **households into compliance units**. A quarter-million families now operate under daily reporting requirements with permit-level consequences for failure. That is not regulatory hygiene. That is mass surveillance of private domestic arrangements.
+
+When elderly employers fail to comply — and they will — what is the enforcement pathway? Do we
+
+------------------------------------------------------------
+
+=== ORCHESTRATOR SYNTHESIS ===
+
+# INTER-AGENCY CONSULTATION ANALYSIS
+## Digital Registration Platform for Migrant Domestic Workers
+
+---
+
+## 1. FAULT LINES
+
+### A. What Problem Are We Solving?
+
+**MOM's implicit frame:** Detection gap. Abuse happens invisibly; we need upstream signals.
+
+**MSF's counter-frame:** Not a detection problem — it's access, trust, and enforcement. We already know abuse exists. Workers don't report because they have no safe pathway, not because we lack monitoring infrastructure.
+
+**This is the core disagreement.** MOM is building sensor infrastructure for a system that MSF says lacks effective response capacity. MSF will inherit operational burden — drowning in alerts — for a problem definition they reject.
+
+**Unbridged gap:** No shared theory of change. MOM has not demonstrated that anomaly detection predicts abuse better than existing reporting channels, nor that early alerts translate to early intervention.
+
+---
+
+### B. Surveillance vs Protection
+
+**MSF:** This is surveillance theatre. Monitoring phone check-ins is not protecting workers. It mistakes compliance data for welfare signals.
+
+**MHA:** Agrees it's surveillance, but the concern is **who else is watching**. A centralized database tracking foreign workers in private homes is a counterintelligence target. Breach = operational intelligence for hostile actors.
+
+**MTI:** Doesn't object to surveillance per se, but asks **who bears the cost**. Employer compliance burden, not worker safety, is the primary concern.
+
+**Unresolved:** Does anyone believe this system will **actually detect abuse**? MHA and MSF are skeptical for different reasons. MOM's case rests on an untested assumption. MTI doesn't engage the question — economic impact trumps welfare theory.
+
+**Tells us:** Only MOM believes in the core mechanism. Other agencies are responding to second-order harms (economic drag, security risk, operational overload) because they don't accept the first-order premise.
+
+---
+
+### C. Mandatory vs Voluntary
+
+**MTI:** Make it opt-in with incentives. Blanket mandate punishes 240,000 compliant households to catch the 1% abusing workers.
+
+**MSF:** (Implicit) No version of this works if it's mandatory — it shifts risk onto workers and creates a compliance task for abusers to control.
+
+**MOM's design:** Mandatory, tied to permit conditions. Non-negotiable.
+
+**Why this matters:** MTI wants risk-based targeting (only high-risk employers). MOM wants universal coverage (detection requires baseline data across all employers). These are incompatible architectures. If MOM accepts opt-in, the system loses the anomaly detection model — you can't spot outliers without a population baseline. If MTI accepts mandatory, they've signed onto an economy-wide compliance regime they fundamentally oppose.
+
+**Decision forcing question:** Is this a **universal safeguard** or **targeted enforcement**? The proposal tries to be both. Agencies have chosen sides.
+
+---
+
+### D. Who Holds Risk When the System Fails?
+
+**MTI:** Employers. Elderly, digitally excluded, middle-income families one app failure away from permit violations.
+
+**MSF:** Workers. They become responsible for generating the data that triggers investigations into their own situations. Abusive employers force check-ins; vulnerable workers get flagged when phones break.
+
+**MHA:** The state. We've built exploitable infrastructure and created resource-draining false positive loads that degrade enforcement capacity.
+
+**MOM (not stated, but implied by design):** Risk is acceptable if it yields early detection. 
+
+**Unbridged:** MOM has not addressed **who absorbs the cost of errors**. If the false positive rate is 5%, that's 12,000 households/year investigated for spurious reasons. MTI says that's economic disruption. MSF says that's wasted frontline capacity. MHA says that's a security gap — real cases drown in noise. MOM's proposal is silent on error tolerance.
+
+---
+
+## 2. UNEXPECTED CONSENSUS
+
+### A. The Operational Back-End Does Not Exist
+
+**MSF, MHA, and MTI converge:** This proposal builds a detection layer without a functioning response layer.
+
+- **MSF:** We don't have capacity to investigate thousands of alerts. SSOs are stretched. What happens after an alert? Who shows up? With what authority?
+  
+- **MHA:** Alert response protocols are undefined. If SSOs can't enforce, cases stall. If police respond to every missed check-in, we've criminalized welfare concerns.
+
+- **MTI:** (Implicit) If enforcement is inconsistent — some employers lose permits, others get warnings — we've created arbitrary compliance outcomes.
+
+**Rare alignment.** All three agencies are saying: **you're building the front-end of a system whose back-end doesn't exist.** Even if detection worked (which MSF doubts), the intervention pathway is unspecified.
+
+**This should halt the proposal.** You cannot mandate reporting infrastructure without defining what happens when reports are generated. MOM has designed an alert dashboard with no clear answer to "then what?"
+
+---
+
+### B. This System is Gameable by Bad Actors
+
+**MSF:** Abusive employers will control check-ins. The most coercive households will generate the cleanest compliance data.
+
+**MHA:** Sophisticated bad actors (trafficking syndicates, organized exploitation) will script compliance. The system rewards performative check-ins while actual harm hides in the data.
+
+**Shared recognition:** The proposal assumes workers have autonomous phone access and will generate honest signals. Both agencies know this is false. **The worst employers will be the best compliers.**
+
+**Implication:** The system is **negatively selective** — it will flag vulnerable employers (elderly, confused, digitally excluded) while missing the dangerous ones. That's the opposite of risk-based enforcement.
+
+---
+
+### C. No One Trusts the Data
+
+**MSF:** Check-in frequency does not measure wellbeing. You can check in daily and still be abused. The data fields are orthogonal to the harms being addressed.
+
+**MHA:** Compliance data is not intelligence. Anomalies might indicate problems, or phone issues, or travel, or coercion, or nothing. High noise-to-signal ratio.
+
+**MTI:** (Implicit) If data quality is poor, the compliance burden is unjustified.
+
+**Convergence:** Even if we build this system, **no one believes the data will be interpretable.** MSF says it won't capture abuse. MHA says it will generate investigative dead-ends. MTI doesn't engage data quality because they oppose the mandate regardless.
+
+**Unsaid but damning:** If three agencies doubt the data's meaning, why are we collecting it?
+
+---
+
+## 3. UNANSWERED QUESTIONS
+
+### A. What Is the False Positive Rate?
+
+**Raised by:** MTI, MSF, MHA.
+
+**Why it matters:** If 5% of alerts are spurious (MTI's estimate), that's ~600 false positives/month across 240,000 households. If it's 10%, we're investigating 1,200 compliant households monthly while real abuse remains undetected.
+
+**MOM has not piloted this.** No controlled test. No baseline data. No evidence that anomaly thresholds (48 hours no check-in, working-hour spikes) correlate with actual harm.
+
+**This is disqualifying.** You cannot mandate economy-wide reporting infrastructure without knowing how often it misfires. MTI is correct: this is speculation dressed as policy.
+
+---
+
+### B. What Happens After an Alert?
+
+**Raised by:** MSF, MHA.
+
+**The operational void:**
+
+- Who triages the dashboard? MOM? MSF? Outsourced contractors?
+- Who responds to alerts? SSOs (no enforcement power)? MOM inspectors (limited bandwidth)? Police (inappropriate for welfare concerns)?
+- What authority do responders have? Can they demand private access to the worker? Can employers refuse?
+- What if the worker says "I'm fine" under duress? What's the protocol for assessing credibility?
+- What if the employer is non-compliant but the worker is not at risk? Do we revoke permits? Issue warnings? 
+
+**MOM has defined the input (alerts) but not the process (investigation) or output (enforcement decision).** MSF will inherit this operational chaos.
+
+---
+
+### C. Where Is Data Stored and Who Has Access?
+
+**Raised by:** MHA.
+
+**Security questions MOM must answer:**
+
+- Is this built in-house or contracted? If contracted, to whom? Where are servers located?
+- Who maintains the platform? Are there offshore support staff? Subcontractors?
+- What is the access control model? Can MOM officers query individual worker profiles? Can MSF? Can police?
+- What is the breach response protocol?
+- Has the system been red-teamed for counterintelligence vulnerabilities?
+
+**If MOM cannot answer these questions, MHA will not endorse.** A centralized database tracking 240,000 foreign nationals in private residences cannot be built on standard procurement timelines with standard vendors. This requires secure-by-design architecture.
+
+---
+
+### D. What Is the Legal Basis for Enforcement?
+
+**Raised by:** MHA (implicitly), MSF (operationally).
+
+**The legal gap:**
+
+- Non-compliance is a permit condition violation. Fine. But what statute allows MOM or MSF to enter a home and demand private access to a worker based on a missed check-in?
+- If an employer refuses access, what's the enforcement pathway? Revoke permit? That punishes the worker (job loss, repatriation).
+- If a worker is interviewed in the employer's presence and says nothing is wrong, can we override her statement? On what grounds?
+
+**MOM has created a detection system without investigative powers to act on detections.** MSF correctly asks: are we empowered to intervene, or just empowered to collect data?
+
+---
+
+### E. What Happens to Existing Arrangements?
+
+**Raised by:** MTI.
+
+**The transition question:** 240,000 current work permits suddenly require daily digital compliance. Do we:
+
+- Mandate immediate enrollment (operational shock, mass non-compliance)?
+- Phase in over 12 months (two-tier system, confusion)?
+- Grandfather existing permits until renewal (delayed implementation, reduced coverage)?
+
+**MTI suggests a two-year grace period.** MOM's proposal is silent. This matters because **implementation design determines compliance outcomes.** A hard cutover will generate mass violations among compliant employers who don't understand the new system.
+
+---
+
+## 4. MISSING ACTORS
+
+### A. The Workers Themselves
+
+**Glaring absence:** Not one agency has mentioned **consulting MDWs** about this system.
+
+**What we don't know:**
+
+- Do workers want daily check-ins, or does it feel like additional surveillance?
+- Will workers in controlling households be punished for triggering alerts?
+- Do workers trust that check-ins remain confidential from employers?
+- What happens to a worker whose employer loses their permit due to non-compliance? She loses her job and potentially her migration pathway.
+
+**MSF hints at this:** "Workers who do not want intervention" — some arrangements are consensual, some prefer intensive work for higher pay. A rigid monitoring system can't distinguish.
+
+**The proposal treats workers as data sources, not stakeholders.** They are the subject of surveillance but have no voice in its design. If this system is "for their protection," why haven't we asked if they want it?
+
+---
+
+### B. Employers' Representatives
+
+**Who speaks for employers?** Not MTI — they speak for economic aggregates, not household interests.
+
+**Missing voices:**
+
+- Association of Employment Agencies (they broker placements and manage ongoing support)
+- Employers' interest groups (if they exist)
+- Eldercare and disability advocacy groups (many employers are elderly or disabled and dependent on MDWs)
+
+**Why it matters:** These are the people who will **operate the system daily**. If it's unusable for elderly employers, or if agencies see compliance costs spiking, we'll see black market arrangements (undocumented workers) or families dropping out of formal employment entirely.
+
+**MTI raises this indirectly** (digital exclusion, compliance burden) but no one is directly representing the **usability perspective** of non-tech-fluent employers.
+
+---
+
+### C. MND (Ministry of National Development)
+
+**Why they matter:** If employers face permit revocations, or if compliance burdens push households out of formal MDW employment, **who provides care**? Especially in HDB households where MDWs enable aging-in-place.
+
+**MND oversees housing policy and has a stake in household stability.** If this proposal destabilizes care arrangements — elderly lose permits, can't manage apps, face enforcement — we risk:
+
+- Increased demand for residential care (nursing homes, which are capacity-constrained)
+- Informal care arrangements (undocumented workers, family members leaving workforce)
+- Deterioration in elderly welfare
+
+**No one has modeled the care-system impact** of potentially revoking thousands of MDW permits for non-compliance.
+
+---
+
+### D. MCCY (Ministry of Culture, Community and Youth)
+
+**Why they matter:** This is a **community relations issue**. If 240,000 households suddenly face daily reporting requirements with permit-level stakes, and enforcement is inconsistent, we've introduced regulatory anxiety into a quarter-million families.
+
+**MCCY handles community trust and social cohesion.** If households perceive this as over-reach — particularly if false positives lead to intrusive investigations — we risk:
+
+- Erosion of trust in MOM as a regulator
+- Backlash against foreign worker protections generally ("the rules are impossible to comply with")
+- Political pressure to roll back enforcement, which then undermines the system's purpose
+
+**No one has assessed the community reception** of mandatory household surveillance.
+
+---
+
+### E. AGC (Attorney-General's Chambers)
+
+**Critical legal absence.** MHA raises enforcement authority questions. MSF raises intervention protocol gaps. **Who has vetted the legal architecture?**
+
+**Questions AGC must answer:**
+
+- Can permit conditions compel daily digital reporting? (Probably yes, but needs confirmation.)
+- Can MOM or MSF demand home access based on missed check-ins? (Unclear. Likely requires consent or a warrant.)
+- What is the legal standard for investigation vs enforcement? (Anomaly detection is not probable cause.)
+- What are the liability risks if the system fails and a worker is harmed? (If MOM has data suggesting risk but doesn't act, is the state liable?)
+- What are the privacy implications under PDPA? (Workers' data is collected by employers, stored by government, potentially shared across agencies.)
+
+**This system creates new enforcement powers and new legal obligations.** AGC should have been consulted before the proposal reached inter-agency review.
+
+---
+
+### F. ICA (Immigration and Checkpoints Authority)
+
+**Why they matter:** Work permit enforcement is an ICA function. If MOM generates thousands of alerts, **who investigates permit violations**?
+
+**Operational overlap:**
+
+- ICA handles work permit overstays, unauthorized employment, and repatriation.
+- If this system flags workers who haven't checked in, is that an MOM welfare concern or an ICA immigration concern?
+- If a worker's permit is revoked due to employer non-compliance, ICA manages her repatriation. Have they been resourced for a potential surge in revocations?
+
+**ICA's absence suggests the enforcement pathway hasn't been mapped.** MOM has designed a detection system without coordinating with the agencies that would execute enforcement.
+
+---
+
+## SYNTHESIS: WHERE THIS PROPOSAL STANDS
+
+### This Is a Solution in Search of a Problem Definition
+
+**MOM says:** We have a detection gap.  
+**MSF says:** We have an access and enforcement gap.  
+**MTI says:** We have a compliance cost problem.  
+**MHA says:** We have a security risk.
+
+**No shared problem definition = no coherent solution.** The proposal will fail because agencies are solving different problems.
+
+---
+
+### The Operational Back-End Does Not Exist
+
+**MSF, MHA, and MTI agree:** Alert response protocols are undefined. Investigation pathways are unclear. Enforcement authority is ambiguous. Resource requirements are uncosted.
+
+**You cannot mandate a reporting system without defining what happens to reports.** This is a half-built policy.
+
+---
+
+### The System Will Generate Noise, Not Signal
+
+**MSF and MHA agree:** False positives will overwhelm real cases. Bad actors will game compliance. Data quality will be poor.
+
+**MTI adds:** Without pilot data, we're speculating about accuracy.
+
+**No one believes the data will be interpretable.** That's a fatal flaw for a detection-based system.
+
+---
+
+### The Human Impact Has Not Been Assessed
+
+**Workers:** Not consulted. Treated as data sources, not stakeholders.  
+**Employers:** Compliance burden on 240,000 households, many digitally excluded.  
+**Frontline officers:** MSF will inherit operational chaos without resources or authority.
+
+**The proposal creates harm across all three groups** without evidence it will reduce harm to workers.
+
+---
+
+## RECOMMENDATION
+
+**This proposal should not proceed in its current form.**
+
+Before any further discussion:
+
+1. **Pilot the system.** Test anomaly detection on a voluntary cohort. Measure false positive rates. Document what alerts actually correlate with harm.
+
+2. **Define the operational back-end.** Who responds to alerts? With what authority? What is the investigation protocol? How do we distinguish welfare concerns from enforcement matters?
+
+3. **Consult workers.** Do they want this system? Will it make them safer or more vulnerable?
+
+4. **Cost the enforcement load.** MSF and MOM must jointly model resource requirements for alert triage and investigation.
+
+5. **Secure the infrastructure.** MHA must vet the technical architecture for counterintelligence risks before any centralized database is built.
+
+6. **Engage missing actors.** AGC (legal authority), ICA (enforcement coordination), MND (care-system impact), MCCY (community relations).
+
+**If MOM cannot answer these questions, the proposal is premature.**

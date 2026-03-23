@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paul — Policy Simulation Chamber</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e10;
+    --surface: #16161a;
+    --border: #2a2a32;
+    --mti: #e8a838;
+    --msf: #5eb8a0;
+    --mha: #c06070;
+    --orch: #8888cc;
+    --text: #d8d8e0;
+    --text-dim: #6a6a80;
+    --text-bright: #f0f0f8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px),
+      repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  header {
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 32px;
+  }
+
+  .header-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 38px;
+    font-weight: 300;
+    color: var(--text-bright);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--orch);
+  }
+
+  .header-sub {
+    color: var(--text-dim);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .agents-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .agent-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 3px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  .agent-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .agent-chip.mti .agent-dot { background: var(--mti); }
+  .agent-chip.msf .agent-dot { background: var(--msf); }
+  .agent-chip.mha .agent-dot { background: var(--mha); }
+  .agent-chip.orch .agent-dot { background: var(--orch); }
+
+  .input-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+
+  .input-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text-bright);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 14px;
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.6;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  textarea:focus { border-color: var(--orch); }
+  textarea::placeholder { color: var(--text-dim); }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .run-btn {
+    background: var(--orch);
+    color: #0e0e10;
+    border: none;
+    padding: 10px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  .run-btn:hover { opacity: 0.88; }
+  .run-btn:active { transform: scale(0.98); }
+  .run-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .clear-btn {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 10px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .clear-btn:hover { color: var(--text); border-color: var(--text-dim); }
+
+  .status-text {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .simulation-output {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .message-block {
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    animation: fadeSlideIn 0.4s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .message-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .message-block.mti .message-header { background: rgba(232,168,56,0.06); border-bottom-color: rgba(232,168,56,0.2); }
+  .message-block.msf .message-header { background: rgba(94,184,160,0.06); border-bottom-color: rgba(94,184,160,0.2); }
+  .message-block.mha .message-header { background: rgba(192,96,112,0.06); border-bottom-color: rgba(192,96,112,0.2); }
+  .message-block.orch .message-header { background: rgba(136,136,204,0.06); border-bottom-color: rgba(136,136,204,0.2); }
+
+  .message-agent-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .message-block.mti .message-agent-dot { background: var(--mti); }
+  .message-block.msf .message-agent-dot { background: var(--msf); }
+  .message-block.mha .message-agent-dot { background: var(--mha); }
+  .message-block.orch .message-agent-dot { background: var(--orch); }
+
+  .message-agent-name {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .message-block.mti .message-agent-name { color: var(--mti); }
+  .message-block.msf .message-agent-name { color: var(--msf); }
+  .message-block.mha .message-agent-name { color: var(--mha); }
+  .message-block.orch .message-agent-name { color: var(--orch); }
+
+  .message-role { font-size: 10px; color: var(--text-dim); margin-left: auto; font-style: italic; }
+
+  .message-body {
+    padding: 18px 20px;
+    line-height: 1.75;
+    color: var(--text);
+    font-size: 13px;
+    background: var(--surface);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .message-block.orch .message-body { background: rgba(136,136,204,0.04); }
+
+  .thinking-block {
+    border-radius: 4px;
+    border: 1px dashed var(--border);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: fadeSlideIn 0.3s ease forwards;
+    opacity: 0;
+  }
+
+  .thinking-dots { display: flex; gap: 4px; }
+
+  .thinking-dots span {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--text-dim);
+    animation: pulse 1.2s infinite;
+  }
+
+  .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes pulse {
+    0%, 60%, 100% { opacity: 0.2; transform: scale(0.8); }
+    30% { opacity: 1; transform: scale(1); }
+  }
+
+  .thinking-label { font-size: 11px; color: var(--text-dim); font-style: italic; }
+
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 12px 0;
+    color: var(--text-dim);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .section-divider::before, .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-dim);
+    font-size: 12px;
+    font-style: italic;
+    border: 1px dashed var(--border);
+    border-radius: 4px;
+  }
+
+  .error-state {
+    text-align: center;
+    padding: 24px;
+    color: #c06070;
+    font-size: 12px;
+    border: 1px dashed #c06070;
+    border-radius: 4px;
+    opacity: 0.8;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="header-label">Paul · Policy Simulation Chamber</div>
+    <h1>Inter-agency <em>Deliberation</em></h1>
+    <div class="header-sub">
+      Three agency agents — MTI, MSF, MHA — deliberate on a policy proposal.<br>
+      An orchestrator synthesises fault lines, consensus, and blind spots.
+    </div>
+  </header>
+
+  <div class="agents-row">
+    <div class="agent-chip mti"><div class="agent-dot"></div>MTI — Trade &amp; Industry</div>
+    <div class="agent-chip msf"><div class="agent-dot"></div>MSF — Social &amp; Family</div>
+    <div class="agent-chip mha"><div class="agent-dot"></div>MHA — Home Affairs</div>
+    <div class="agent-chip orch"><div class="agent-dot"></div>Orchestrator — Synthesis</div>
+  </div>
+
+  <div class="input-section">
+    <div class="input-label">Policy Proposal</div>
+    <textarea id="proposal" placeholder="Enter a policy proposal for the agencies to deliberate on...">All migrant domestic workers should be required to register with a government digital platform that tracks their location, working hours, and employer contact frequency, to detect abuse and ensure welfare.</textarea>
+    <div class="controls">
+      <button class="run-btn" id="runBtn" onclick="runSimulation()">▶ Run Simulation</button>
+      <button class="clear-btn" onclick="clearOutput()">Clear</button>
+      <span class="status-text" id="statusText"></span>
+    </div>
+  </div>
+
+  <div class="simulation-output" id="output">
+    <div class="empty-state">The simulation chamber is ready. Enter a proposal and run.</div>
+  </div>
+</div>
+
+<script>
+const FLASK_URL = "http://localhost:5001";
+
+function addThinking(label) {
+  const div = document.createElement('div');
+  div.className = 'thinking-block';
+  div.id = 'thinking-indicator';
+  div.innerHTML = `
+    <div class="thinking-dots"><span></span><span></span><span></span></div>
+    <div class="thinking-label">${label}</div>
+  `;
+  document.getElementById('output').appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+function removeThinking() {
+  const el = document.getElementById('thinking-indicator');
+  if (el) el.remove();
+}
+
+function addMessage(agentId, agentName, role, text) {
+  const div = document.createElement('div');
+  div.className = `message-block ${agentId}`;
+  div.innerHTML = `
+    <div class="message-header">
+      <div class="message-agent-dot"></div>
+      <div class="message-agent-name">${agentName}</div>
+      <div class="message-role">${role}</div>
+    </div>
+    <div class="message-body">${text}</div>
+  `;
+  document.getElementById('output').appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+function addDivider(label) {
+  const div = document.createElement('div');
+  div.className = 'section-divider';
+  div.textContent = label;
+  document.getElementById('output').appendChild(div);
+}
+
+async function runSimulation() {
+  const proposal = document.getElementById('proposal').value.trim();
+  if (!proposal) return;
+
+  const btn = document.getElementById('runBtn');
+  const status = document.getElementById('statusText');
+  btn.disabled = true;
+
+  document.getElementById('output').innerHTML = '';
+  addThinking('Sending proposal to Paul backend…');
+  status.textContent = 'Contacting Flask server…';
+
+  try {
+    const response = await fetch(`${FLASK_URL}/simulate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ proposal })
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error || `Server error ${response.status}`);
+    }
+
+    removeThinking();
+    const result = await response.json();
+
+    // Render each agency response
+    for (const r of result.responses) {
+      addMessage(r.id, r.name, r.role, r.text);
+      await new Promise(res => setTimeout(res, 200));
+    }
+
+    // Render synthesis
+    addDivider('Orchestrator Synthesis');
+    addMessage('orch', 'Orchestrator', 'Policy Analyst · Synthesis', result.synthesis);
+
+    status.textContent = 'Simulation complete.';
+
+  } catch (err) {
+    removeThinking();
+    const errDiv = document.createElement('div');
+    errDiv.className = 'error-state';
+    errDiv.textContent = `Error: ${err.message}. Is the Flask server running? Try: python app.py`;
+    document.getElementById('output').appendChild(errDiv);
+    status.textContent = 'Error.';
+  }
+
+  btn.disabled = false;
+}
+
+function clearOutput() {
+  document.getElementById('output').innerHTML =
+    '<div class="empty-state">The simulation chamber is ready. Enter a proposal and run.</div>';
+  document.getElementById('statusText').textContent = '';
+}
+</script>
+</body>
+</html>

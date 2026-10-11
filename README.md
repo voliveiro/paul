@@ -9,7 +9,7 @@ It is not a consensus machine. It is a structured way to surface the tensions in
 ## How it works
 
 1. Enter a policy proposal in the web interface
-2. Select which agencies should deliberate, or leave all unselected and let the orchestrator choose 3–5 based on relevance
+2. Select which agencies should deliberate, or leave all unselected and let the orchestrator choose 2–4 based on relevance. The Ministry of Finance always takes part and always responds last
 3. Each selected agency responds in sequence — later agencies can see what earlier ones said
 4. The orchestrator analyses the full set of responses across four dimensions: fault lines, unexpected consensus, unanswered questions, and missing actors
 5. Responses stream to the browser as they arrive — you do not wait for all agents to finish before seeing output
@@ -46,7 +46,9 @@ Each agent has a system prompt that defines its institutional lens, priorities, 
 
 ## Orchestrator auto-selection
 
-If no agencies are selected before running, the orchestrator reads a concise mandate summary for each of the 17 agents and picks 3–5 whose jurisdictions are most directly engaged by the proposal. The selected agencies are shown in the UI before the simulation begins.
+If no agencies are selected before running, the orchestrator reads a concise mandate summary for each of the 17 agents and picks 2–4 whose jurisdictions are most directly engaged by the proposal. MOF is then added automatically, giving 3–5 agencies in total. The selected agencies are shown in the UI before the simulation begins.
+
+MOF is always included and always responds last — whether agencies are picked manually or by the orchestrator — so it can weigh the cost implications of every other agency's position. This is set by `FINAL_AGENT` in `orchestrator.py`.
 
 Summaries used for selection are in `agents/summaries.json` — separate from the full system prompts, and editable independently.
 

@@ -15,14 +15,37 @@ ORCHESTRATOR_PROMPT = """You are a senior policy analyst facilitating an inter-a
 
 Be analytically sharp. Name things precisely. Avoid diplomatic smoothing. Write like a senior civil servant, not an academic. Short sentences. Plain words. No jargon. If you can cut a word, cut it. Flag problems directly — do not soften them."""
 
+SYNERGIES_PROMPT = """You are a senior policy analyst facilitating an inter-agency consultation. Given responses from several ministries, identify where agencies can work together and where their objectives reinforce each other. Structure your analysis across four dimensions:
+
+1. SHARED OBJECTIVES — Where do agencies have overlapping goals that could be pursued jointly rather than in parallel?
+2. COMPLEMENTARY CAPABILITIES — Which agencies bring different but compatible tools, resources, or powers that, combined, would produce better outcomes than either acting alone?
+3. NATURAL COALITIONS — Which groupings of two or three agencies have the strongest case for a joint programme, task force, or co-funding arrangement? Name the specific grouping and the specific opportunity.
+4. QUICK WINS — What collaborative actions could begin immediately, without new legislation or structural change?
+
+Be concrete. Name the agencies, the mechanism, and the outcome. Avoid vague calls for "coordination". If genuine collaboration is unlikely, say so and explain why. Write like a senior civil servant: short sentences, plain words, no jargon."""
+
+# MOF always deliberates, and always speaks last so it can weigh the cost of every other position
+FINAL_AGENT = "mof"
+
+
+def order_agent_ids(ids):
+    """Drop unknown ids and duplicates, ensure FINAL_AGENT is included, and move it to the end."""
+    known = {a.id for a in AGENTS}
+    seen = set()
+    ordered = [i for i in ids if i in known and i != FINAL_AGENT and not (i in seen or seen.add(i))]
+    return ordered + [FINAL_AGENT]
+
+
 with open(os.path.join(os.path.dirname(__file__), "agents", "summaries.json")) as _f:
     AGENT_SUMMARIES = json.load(_f)
 
 
 def select_agents(proposal):
-    """Ask Claude to pick 3–5 most relevant agents for this proposal."""
+    """Ask Claude to pick the most relevant agents; MOF is always added, last (3–5 in total)."""
     agent_profiles = []
     for a in AGENTS:
+        if a.id == FINAL_AGENT:
+            continue
         summary = AGENT_SUMMARIES.get(a.id, a.role)
         agent_profiles.append(f"[{a.id}] {a.name}: {summary}")
 
@@ -36,22 +59,20 @@ PROPOSAL:
 AVAILABLE AGENCIES:
 {profiles_text}
 
-Select between 3 and 5 agencies whose mandates make them most directly and substantively relevant to this proposal. Prioritise agencies with genuine jurisdictional stakes, not peripheral interest.
+The Ministry of Finance is always included automatically, so do not select it. Select between 2 and 4 further agencies whose mandates make them most directly and substantively relevant to this proposal. Prioritise agencies with genuine jurisdictional stakes, not peripheral interest.
 
 Return ONLY a JSON array of agency IDs (lowercase strings), e.g. ["mti", "mha", "msf"]. No explanation, no other text."""
 
     response = client.messages.create(
-        model="claude-sonnet-4-5",
+        model="claude-sonnet-4-6",
         max_tokens=80,
         messages=[{"role": "user", "content": prompt}]
     )
 
     text = response.content[0].text.strip()
     selected = json.loads(text)
-    known = {a.id for a in AGENTS}
-    selected = [aid for aid in selected if aid in known]
-    # Clamp to 3–5
-    return selected[:5] if len(selected) >= 3 else selected
+    others = order_agent_ids(selected)[:-1][:4]  # at most 4 others + MOF = 5 in total
+    return others + [FINAL_AGENT]
 
 
 def load_proposal(path="proposal.txt"):
@@ -60,7 +81,7 @@ def load_proposal(path="proposal.txt"):
 
 def call_agent(system_prompt, user_message, max_tokens=2000):
     response = client.messages.create(
-        model="claude-sonnet-4-5",
+        model="claude-sonnet-4-6",
         max_tokens=max_tokens,
         system=system_prompt,
         messages=[{"role": "user", "content": user_message}]
@@ -97,12 +118,12 @@ def save_output(proposal, responses, synthesis):
     print(f"\nOutput saved to {path}")
 
 
-def run_simulation_stream(proposal, selected_ids=None):
+def run_simulation_stream(proposal, selected_ids=None, synthesis_mode="standard"):
     """Generator that yields SSE-formatted events as each agent responds."""
-    agents = AGENTS
-    if selected_ids is not None:
-        id_set = set(selected_ids)
-        agents = [a for a in AGENTS if a.id in id_set]
+    if selected_ids is None:
+        selected_ids = [a.id for a in AGENTS]
+    by_id = {a.id: a for a in AGENTS}
+    agents = [by_id[i] for i in order_agent_ids(selected_ids)]
 
     responses = []
 
@@ -118,12 +139,14 @@ def run_simulation_stream(proposal, selected_ids=None):
         yield f"data: {json.dumps({'type': 'agent', **r})}\n\n"
 
     # Synthesis pass
+    prompt = SYNERGIES_PROMPT if synthesis_mode == "synergies" else ORCHESTRATOR_PROMPT
+
     synthesis_input = f"Policy proposal:\n\"{proposal}\"\n\nAgency responses:\n\n"
     for r in responses:
         synthesis_input += f"=== {r['name']} ({r['role']}) ===\n{r['text']}\n\n"
     synthesis_input += "Please provide your analytical synthesis."
 
-    synthesis = call_agent(ORCHESTRATOR_PROMPT, synthesis_input, max_tokens=8000)
+    synthesis = call_agent(prompt, synthesis_input, max_tokens=8000)
 
     print(f"\n=== SYNTHESIS ===\n{synthesis}")
 

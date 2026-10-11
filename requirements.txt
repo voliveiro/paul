@@ -2,3 +2,5 @@ anthropic
 flask
 flask-cors
 python-dotenv
+pypdf
+python-docx

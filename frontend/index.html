@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Paul — Policy Simulation Chamber</title>
 <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
 <style>
   :root {
     --bg: #f5f0e8;
@@ -122,6 +124,15 @@
   .agent-checkbox-label input[type="checkbox"] { display: none; }
 
   .agent-checkbox-label.unchecked { opacity: 0.38; }
+  .agent-checkbox-label.locked { cursor: default; border-style: dashed; }
+  .agent-checkbox-label.locked:hover { border-color: var(--border); }
+  .agent-check-lock {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-style: italic;
+  }
 
   .agent-check-dot {
     width: 7px;
@@ -204,6 +215,20 @@
   }
 
   textarea:focus { border-color: var(--accent); }
+  textarea.drag-over { border-color: var(--accent); border-style: dashed; }
+
+  .input-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .input-header .input-label { margin-bottom: 0; }
+  .upload-controls { display: flex; align-items: center; gap: 10px; }
+  .upload-btn { padding: 6px 14px; font-size: 12px; }
+  .file-name { font-size: 12px; color: var(--text-dim); font-style: italic; }
   textarea::placeholder { color: var(--text-dim); }
 
   .controls {
@@ -246,6 +271,9 @@
   }
 
   .clear-btn:hover { color: var(--text); border-color: var(--text-dim); }
+  .download-btn { color: var(--accent); border-color: var(--accent); }
+  .download-btn:hover { color: var(--accent); opacity: 0.85; }
+  .download-btn:disabled { opacity: 0.4; cursor: wait; }
 
   .status-text {
     font-size: 12px;
@@ -287,13 +315,64 @@
 
   .message-body {
     padding: 18px 20px;
-    line-height: 1.8;
+    line-height: 1.65;
     color: var(--text);
     font-size: 14px;
     background: var(--bg);
-    white-space: pre-wrap;
     word-break: break-word;
   }
+
+  /* Rendered markdown inside agent responses */
+  .message-body > :first-child { margin-top: 0; }
+  .message-body > :last-child { margin-bottom: 0; }
+  .message-body p { margin: 0 0 0.75em; }
+  .message-body h1, .message-body h2, .message-body h3,
+  .message-body h4, .message-body h5, .message-body h6 {
+    font-family: 'Libre Baskerville', serif;
+    color: var(--text-bright);
+    line-height: 1.35;
+    margin: 1.4em 0 0.5em;
+  }
+  .message-body h1 { font-size: 18px; }
+  .message-body h2 { font-size: 16px; }
+  .message-body h3 { font-size: 14.5px; }
+  .message-body h4, .message-body h5, .message-body h6 {
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .message-body strong { color: var(--text-bright); font-weight: 700; }
+  .message-body ul, .message-body ol { margin: 0 0 0.75em; padding-left: 1.4em; }
+  .message-body li { margin: 0.25em 0; }
+  .message-body li > p { margin: 0 0 0.35em; }
+  .message-body li::marker { color: var(--text-dim); }
+  .message-body hr { border: none; border-top: 1px solid var(--border); margin: 1.2em 0; }
+  .message-body blockquote {
+    border-left: 3px solid var(--border);
+    padding-left: 12px;
+    margin: 0 0 0.75em;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+  .message-body code {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    background: var(--surface);
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+  .message-body .table-wrap { overflow-x: auto; margin: 0 0 0.75em; }
+  .message-body table { border-collapse: collapse; font-size: 13px; }
+  .message-body th, .message-body td {
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  .message-body th { background: var(--surface); color: var(--text-bright); }
+  .message-body.plain { white-space: pre-wrap; }
 
   .thinking-block {
     border-radius: 4px;
@@ -343,6 +422,55 @@
     background: var(--border);
   }
 
+  /* Synthesis mode toggle */
+  .synthesis-mode {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 24px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .mode-options {
+    display: flex;
+    gap: 8px;
+  }
+
+  .mode-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .mode-option input[type="radio"] { display: none; }
+
+  .mode-option.active {
+    border-color: var(--accent);
+    background: rgba(192, 67, 42, 0.06);
+  }
+
+  .mode-option-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-bright);
+  }
+
+  .mode-option-desc {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
   .empty-state {
     text-align: center;
     padding: 48px 24px;
@@ -374,6 +502,22 @@
     </div>
   </header>
 
+  <div class="synthesis-mode">
+    <div class="section-label" style="margin-bottom: 0; flex-shrink: 0;">Synthesis Mode</div>
+    <div class="mode-options" id="modeOptions">
+      <label class="mode-option active" data-mode="standard">
+        <input type="radio" name="synthesis_mode" value="standard" checked>
+        <span class="mode-option-label">Standard</span>
+        <span class="mode-option-desc">Fault lines, consensus, blind spots</span>
+      </label>
+      <label class="mode-option" data-mode="synergies">
+        <input type="radio" name="synthesis_mode" value="synergies">
+        <span class="mode-option-label">Synergies</span>
+        <span class="mode-option-desc">Cohesion, collaboration, joint action</span>
+      </label>
+    </div>
+  </div>
+
   <div class="agent-selection">
     <div class="section-label">Active Agencies</div>
     <div class="agent-checkboxes" id="agentCheckboxes">
@@ -382,16 +526,24 @@
     <div class="selection-controls">
       <button class="text-btn" onclick="selectAll()">Select all</button>
       <button class="text-btn" onclick="selectNone()">Deselect all</button>
-      <span class="auto-select-hint">If none selected, the orchestrator will pick 3–5 most relevant agencies.</span>
+      <span class="auto-select-hint">If none selected, the orchestrator will pick 2–4 most relevant agencies. MOF always joins and responds last.</span>
     </div>
   </div>
 
   <div class="input-section">
-    <div class="input-label">Policy Proposal</div>
-    <textarea id="proposal" placeholder="Enter a policy proposal for the agencies to deliberate on…"></textarea>
+    <div class="input-header">
+      <div class="input-label">Policy Proposal</div>
+      <div class="upload-controls">
+        <span class="file-name" id="fileName"></span>
+        <button class="clear-btn upload-btn" onclick="document.getElementById('fileInput').click()">⇪ Upload document</button>
+        <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.md" hidden onchange="handleFile(this.files[0]); this.value='';">
+      </div>
+    </div>
+    <textarea id="proposal" placeholder="Enter a policy proposal, upload a document (PDF, DOCX, TXT, MD), or drop a file here…"></textarea>
     <div class="controls">
       <button class="run-btn" id="runBtn" onclick="runSimulation()">▶ Run Simulation</button>
       <button class="clear-btn" onclick="clearOutput()">Clear</button>
+      <button class="clear-btn download-btn" id="downloadBtn" onclick="downloadReport()" hidden>⬇ Download report (.docx)</button>
       <span class="status-text" id="statusText"></span>
     </div>
   </div>
@@ -445,10 +597,14 @@ async function loadAgents() {
   }
 }
 
+// MOF always deliberates and always speaks last (enforced server-side too)
+const FINAL_AGENT = 'mof';
+
 function renderAgentCheckboxes() {
   const container = document.getElementById('agentCheckboxes');
   container.innerHTML = '';
   for (const agent of allAgents) {
+    if (agent.id === FINAL_AGENT) continue;
     const color = AGENT_COLORS[agent.id] || '#888888';
     const label = document.createElement('label');
     label.className = 'agent-checkbox-label';
@@ -465,6 +621,25 @@ function renderAgentCheckboxes() {
     });
     container.appendChild(label);
   }
+
+  const final = allAgents.find(a => a.id === FINAL_AGENT);
+  if (final) {
+    const label = document.createElement('label');
+    label.className = 'agent-checkbox-label locked';
+    label.dataset.id = final.id;
+    label.title = 'Always included, and always responds last — cost is always a factor';
+    label.innerHTML = `
+      <span class="agent-check-dot" style="background: ${AGENT_COLORS[final.id] || '#888888'}"></span>
+      <span class="agent-check-name">${final.name}</span>
+      <span class="agent-check-role">${final.role}</span>
+      <span class="agent-check-lock">· always last</span>
+    `;
+    container.appendChild(label);
+  }
+}
+
+function withFinalAgent(ids) {
+  return [...ids.filter(id => id !== FINAL_AGENT), FINAL_AGENT];
 }
 
 function getSelectedAgents() {
@@ -486,6 +661,18 @@ function selectNone() {
     cb.closest('label').classList.add('unchecked');
   });
 }
+
+function getSynthesisMode() {
+  const checked = document.querySelector('input[name="synthesis_mode"]:checked');
+  return checked ? checked.value : 'standard';
+}
+
+// Wire up mode toggle visual state
+document.getElementById('modeOptions').addEventListener('change', function(e) {
+  document.querySelectorAll('.mode-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.mode === e.target.value);
+  });
+});
 
 function addThinking(label) {
   const div = document.createElement('div');
@@ -514,10 +701,27 @@ function addMessage(agentId, agentName, role, text) {
       <div class="message-agent-name" style="color: ${color}">${agentName}</div>
       <div class="message-role">${role}</div>
     </div>
-    <div class="message-body">${text}</div>
+    <div class="message-body"></div>
   `;
+  renderMarkdown(div.querySelector('.message-body'), text);
   document.getElementById('output').appendChild(div);
   div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+function renderMarkdown(el, text) {
+  // Fall back to escaped plain text if the CDN libraries failed to load
+  if (!window.marked || !window.DOMPurify) {
+    el.classList.add('plain');
+    el.textContent = text;
+    return;
+  }
+  el.innerHTML = DOMPurify.sanitize(marked.parse(text, { gfm: true, breaks: false }));
+  el.querySelectorAll('table').forEach(t => {
+    const wrap = document.createElement('div');
+    wrap.className = 'table-wrap';
+    t.replaceWith(wrap);
+    wrap.appendChild(t);
+  });
 }
 
 function addDivider(label) {
@@ -527,9 +731,15 @@ function addDivider(label) {
   document.getElementById('output').appendChild(div);
 }
 
+let lastSimulation = null;
+
 async function runSimulation() {
   const proposal = document.getElementById('proposal').value.trim();
   if (!proposal) return;
+
+  lastSimulation = null;
+  document.getElementById('downloadBtn').hidden = true;
+  const run = { proposal, responses: [], synthesis: '', synthesis_mode: getSynthesisMode() };
 
   const btn = document.getElementById('runBtn');
   const status = document.getElementById('statusText');
@@ -552,7 +762,7 @@ async function runSimulation() {
       selectedIds = [];
     }
     if (selectedIds.length < 3) {
-      selectedIds = allAgents.slice(0, 3).map(a => a.id);
+      selectedIds = allAgents.filter(a => a.id !== FINAL_AGENT).slice(0, 2).map(a => a.id);
     }
     selectedIds.forEach(id => {
       const cb = document.querySelector(`.agent-checkbox[value="${id}"]`);
@@ -566,6 +776,7 @@ async function runSimulation() {
     status.textContent = `Orchestrator selected: ${names.join(', ')}`;
     await new Promise(r => setTimeout(r, 1400));
   }
+  selectedIds = withFinalAgent(selectedIds);
 
   document.getElementById('output').innerHTML = '';
   addThinking('Contacting Paul backend…');
@@ -575,7 +786,7 @@ async function runSimulation() {
     const response = await fetch(`${FLASK_URL}/simulate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ proposal, agents: selectedIds })
+      body: JSON.stringify({ proposal, agents: selectedIds, synthesis_mode: getSynthesisMode() })
     });
 
     if (!response.ok) {
@@ -605,6 +816,7 @@ async function runSimulation() {
         if (data.type === 'agent') {
           removeThinking();
           agentCount++;
+          run.responses.push({ id: data.id, name: data.name, role: data.role, text: data.text });
           addMessage(data.id, data.name, data.role, data.text);
           if (agentCount < selectedIds.length) {
             addThinking(`${agentCount} of ${selectedIds.length} agencies responded — waiting for next…`);
@@ -615,11 +827,15 @@ async function runSimulation() {
           }
         } else if (data.type === 'synthesis') {
           removeThinking();
-          addDivider('Orchestrator Synthesis');
+          run.synthesis = data.text;
+          const modeLabel = getSynthesisMode() === 'synergies' ? 'Orchestrator Synthesis · Synergies' : 'Orchestrator Synthesis';
+          addDivider(modeLabel);
           addMessage('orch', 'Orchestrator', 'Policy Analyst · Synthesis', data.text);
         } else if (data.type === 'done') {
           removeThinking();
           status.textContent = 'Simulation complete.';
+          lastSimulation = run;
+          document.getElementById('downloadBtn').hidden = false;
         }
       }
     }
@@ -640,7 +856,68 @@ function clearOutput() {
   document.getElementById('output').innerHTML =
     '<div class="empty-state">The simulation chamber is ready. Select agencies, enter a proposal, and run.</div>';
   document.getElementById('statusText').textContent = '';
+  lastSimulation = null;
+  document.getElementById('downloadBtn').hidden = true;
 }
+
+async function downloadReport() {
+  if (!lastSimulation) return;
+  const btn = document.getElementById('downloadBtn');
+  const status = document.getElementById('statusText');
+  btn.disabled = true;
+  status.textContent = 'Generating report…';
+  try {
+    const res = await fetch(`${FLASK_URL}/export`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(lastSimulation)
+    });
+    if (!res.ok) throw new Error((await res.json()).error || `Server error ${res.status}`);
+    const match = (res.headers.get('Content-Disposition') || '').match(/filename="?([^";]+)"?/);
+    const url = URL.createObjectURL(await res.blob());
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = match ? match[1] : 'paul_simulation.docx';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    status.textContent = 'Report downloaded.';
+  } catch (err) {
+    status.textContent = `⚠ Could not generate report: ${err.message}`;
+  }
+  btn.disabled = false;
+}
+
+async function handleFile(file) {
+  if (!file) return;
+  const fileName = document.getElementById('fileName');
+  fileName.textContent = `Reading ${file.name}…`;
+  const form = new FormData();
+  form.append('file', file);
+  try {
+    const res = await fetch(`${FLASK_URL}/extract`, { method: 'POST', body: form });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Upload failed');
+    document.getElementById('proposal').value = data.text;
+    fileName.textContent = `Loaded: ${data.filename}`;
+  } catch (err) {
+    fileName.textContent = `⚠ ${err.message}`;
+  }
+}
+
+(() => {
+  const ta = document.getElementById('proposal');
+  ta.addEventListener('dragover', e => { e.preventDefault(); ta.classList.add('drag-over'); });
+  ta.addEventListener('dragleave', () => ta.classList.remove('drag-over'));
+  ta.addEventListener('drop', e => {
+    ta.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) {
+      e.preventDefault();
+      handleFile(e.dataTransfer.files[0]);
+    }
+  });
+})();
 
 loadAgents();
 </script>

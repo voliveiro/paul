@@ -8,11 +8,62 @@ It is not a consensus machine. It is a structured way to surface the tensions in
 
 ## How it works
 
-1. Enter a policy proposal in the web interface
-2. Select which agencies should deliberate, or leave all unselected and let the orchestrator choose 2–4 based on relevance. The Ministry of Finance always takes part and always responds last
-3. Each selected agency responds in sequence — later agencies can see what earlier ones said
-4. The orchestrator analyses the full set of responses across four dimensions: fault lines, unexpected consensus, unanswered questions, and missing actors
-5. Responses stream to the browser as they arrive — you do not wait for all agents to finish before seeing output
+1. Enter a policy proposal in the web interface — type it, or upload a document (PDF, Word, TXT or Markdown)
+2. Choose a synthesis mode: **Standard** (fault lines, consensus, blind spots) or **Synergies** (where agencies can work together)
+3. Select which agencies should deliberate, or leave all unselected and let the orchestrator choose 2–4 based on relevance. The Ministry of Finance always takes part and always responds last
+4. Each selected agency responds in sequence — later agencies can see what earlier ones said
+5. The orchestrator synthesises the full set of responses (see [Synthesis modes](#synthesis-modes))
+6. Responses stream to the browser as they arrive, formatted as they would be in a document — you do not wait for all agents to finish before seeing output
+7. When the simulation finishes, download the whole thing as a Word report
+
+---
+
+## Features
+
+### Document upload
+
+Click **⇪ Upload document** above the proposal box, or drag a file onto it. Supported formats:
+
+| Format | Notes |
+|--------|-------|
+| PDF | Text-based PDFs only — scanned PDFs (images of pages) contain no text to extract |
+| Word (`.docx`) | Paragraphs and tables, in document order. Older `.doc` files are not supported — save as `.docx` first |
+| Text / Markdown (`.txt`, `.md`) | Read as UTF-8 |
+
+The extracted text is placed in the proposal box so you can check or edit it before running. Uploads are limited to 20 MB.
+
+### Synthesis modes
+
+- **Standard** — the orchestrator maps the deliberative terrain across four dimensions: fault lines, unexpected consensus, unanswered questions, and missing actors.
+- **Synergies** — the orchestrator looks for collaboration instead: shared objectives, complementary capabilities, natural coalitions, and quick wins.
+
+### Ministry of Finance always responds last
+
+Cost is always a factor, so MOF takes part in every simulation and always responds last, just before the orchestrator. Because agencies see earlier responses, MOF weighs the cost implications of every other agency's position. In the UI, MOF appears as a locked chip marked "always last". See [Orchestrator auto-selection](#orchestrator-auto-selection).
+
+### Formatted output
+
+Agency and orchestrator responses are rendered from Markdown — headings, lists, bold, tables — rather than shown as raw text. Rendering uses [marked](https://marked.js.org/) and [DOMPurify](https://github.com/cure53/DOMPurify), loaded from a CDN; if they cannot load (for example, offline), responses fall back to plain text.
+
+### Word report export
+
+When a simulation completes, a **⬇ Download report (.docx)** button appears. The report contains:
+
+- A title section with the date, agencies consulted, and synthesis mode
+- The full policy proposal
+- Each agency's response, under its own heading
+- The orchestrator synthesis
+
+Markdown in the responses is converted to native Word formatting, so headings show up in Word's navigation pane.
+
+### Sample proposals
+
+Two test proposals are included in `samples/`:
+
+| File | Scope |
+|------|-------|
+| `heat_resilience_proposal.docx` | Detailed, multi-agency: work-rest rules, dormitory cooling, an urban cooling levy, heat alerts, shifted working hours, with a cost table |
+| `senior_transport_proposal.docx` | Short and simple: free off-peak public transport for seniors. Designed for three agencies — MOT, MSF and MOF |
 
 ---
 
@@ -78,7 +129,15 @@ Run the server:
 python app.py
 ```
 
-Open `http://localhost:5001` in your browser.
+Open `http://localhost:5001` in your browser. Keep the terminal open while you use Paul; press `Ctrl+C` to stop the server.
+
+To start Paul again later:
+
+```bash
+cd paul
+source venv/bin/activate
+python app.py
+```
 
 ---
 
@@ -86,8 +145,9 @@ Open `http://localhost:5001` in your browser.
 
 ```
 paul/
-├── app.py                  # Flask server — routes and SSE streaming
-├── orchestrator.py         # Agent calls, simulation loop, auto-selection
+├── app.py                  # Flask server — routes, SSE streaming, upload extraction
+├── orchestrator.py         # Agent calls, simulation loop, auto-selection, MOF-last rule
+├── export.py               # Builds the Word report from a finished simulation
 ├── agents/
 │   ├── base.py             # AgentProfile dataclass
 │   ├── summaries.json      # Concise mandate summaries for auto-selection
@@ -95,8 +155,21 @@ paul/
 │   └── ...
 ├── frontend/
 │   └── index.html          # Single-page UI
+├── samples/                # Test proposals to upload
 └── requirements.txt
 ```
+
+---
+
+## API endpoints
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| `GET` | `/agents` | List all agents |
+| `POST` | `/select-agents` | Orchestrator picks agencies for a proposal (MOF always added, last) |
+| `POST` | `/simulate` | Run a simulation; streams server-sent events |
+| `POST` | `/extract` | Upload a file (`multipart/form-data`, field `file`); returns its text |
+| `POST` | `/export` | Send a finished simulation as JSON; returns a `.docx` report |
 
 ---
 
@@ -114,4 +187,4 @@ To adjust how an agent deliberates, edit its `system_prompt`. To adjust whether 
 
 ## Model
 
-All agents and the orchestrator use `claude-sonnet-4-5`. Agent responses are capped at 2,000 tokens; the orchestrator synthesis at 8,000.
+All agents and the orchestrator use `claude-sonnet-4-6`. Agent responses are capped at 2,000 tokens; the orchestrator synthesis at 8,000.
